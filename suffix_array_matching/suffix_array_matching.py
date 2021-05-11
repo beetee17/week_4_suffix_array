@@ -195,8 +195,8 @@ def CountOccurrences(pattern, bwt, starts, occ_counts_before):
     
     else:
       
-      # pattern has been fully searched -> get the number of occurences of pattern
-      return top, bottom+1
+      # pattern has been fully searched
+      return top, bottom
 
     j += 1
 
@@ -206,7 +206,8 @@ def suffix_arr_to_bwt(arr, text):
     return ''.join([text[i-1] for i in arr])
 
 def find_occurrences(text, patterns):
-
+    
+    text += '$'
     suffix_arr = build_suffix_array(text)
     bwt = suffix_arr_to_bwt(suffix_arr, text)
     starts, occ_counts_before = PreprocessBWT(bwt)
@@ -216,11 +217,11 @@ def find_occurrences(text, patterns):
     for pattern in patterns:
         
         top, bottom = CountOccurrences(pattern, bwt, starts, occ_counts_before)
-        
+   
         if top and bottom:
 
-            for i in range(top, bottom):
-
+            for i in range(top, bottom+1):
+                
                 occs.add(suffix_arr[i])
         
     return occs
